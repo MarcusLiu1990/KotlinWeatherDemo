@@ -3,6 +3,7 @@ package com.personal.demo.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.cmoney.demo.base.BaseAdapter
 import com.personal.demo.Constant
@@ -11,6 +12,7 @@ import com.personal.demo.adapter.WeatherAdapter
 import com.personal.demo.model.Time
 import com.personal.demo.model.WeatherInfo
 import com.personal.demo.network.ApiRequest
+import com.personal.demo.util.PrefUtil
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,5 +48,18 @@ class MainActivity : AppCompatActivity() {
                 println(message)
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(PrefUtil.getIntegerPreference(this, Constant.PREF_BACK_TIME, 0) > 0){
+            Toast.makeText(this, "歡迎回來", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        var times: Int = PrefUtil.getIntegerPreference(this, Constant.PREF_BACK_TIME, 0)
+        PrefUtil.setIntegerPreference(this, Constant.PREF_BACK_TIME, times + 1)
     }
 }
